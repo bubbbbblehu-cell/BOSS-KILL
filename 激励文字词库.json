@@ -1,0 +1,184 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-20",
+  "categories": {
+    "motivation": "激励类",
+    "humor": "幽默类",
+    "inspirational": "鼓舞类",
+    "sarcastic": "讽刺类"
+  },
+  "quotes": [
+    {
+      "id": "quote_001",
+      "text": "在最好的青春里，在格子间里激励自己开出最美的花！",
+      "category": "motivation",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.5,
+      "tags": ["青春", "奋斗", "激励"],
+      "isActive": true
+    },
+    {
+      "id": "quote_002",
+      "text": "工作虽苦，但扔大便的快乐谁懂？",
+      "category": "humor",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.2,
+      "tags": ["幽默", "工作", "快乐"],
+      "isActive": true
+    },
+    {
+      "id": "quote_003",
+      "text": "996的你，值得一个大大的便便！",
+      "category": "sarcastic",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.1,
+      "tags": ["讽刺", "加班", "释放"],
+      "isActive": true
+    },
+    {
+      "id": "quote_004",
+      "text": "在格子间里，做一个会扔便便的自由灵魂",
+      "category": "inspirational",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.3,
+      "tags": ["自由", "灵魂", "格子间"],
+      "isActive": true
+    },
+    {
+      "id": "quote_005",
+      "text": "青春不只是奋斗，还有扔大便的快感",
+      "category": "motivation",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.4,
+      "tags": ["青春", "奋斗", "快感"],
+      "isActive": true
+    },
+    {
+      "id": "quote_006",
+      "text": "工作压力大？扔个便便释放一下",
+      "category": "humor",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.0,
+      "tags": ["压力", "释放", "幽默"],
+      "isActive": true
+    },
+    {
+      "id": "quote_007",
+      "text": "在办公室的角落，藏着你的小确幸",
+      "category": "inspirational",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.2,
+      "tags": ["办公室", "确幸", "角落"],
+      "isActive": true
+    },
+    {
+      "id": "quote_008",
+      "text": "不是加班辛苦，是没扔便便的遗憾",
+      "category": "sarcastic",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 3.9,
+      "tags": ["加班", "遗憾", "讽刺"],
+      "isActive": true
+    },
+    {
+      "id": "quote_009",
+      "text": "扔出你的不满，迎接更好的明天",
+      "category": "motivation",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.1,
+      "tags": ["不满", "明天", "迎接"],
+      "isActive": true
+    },
+    {
+      "id": "quote_010",
+      "text": "便便虽小，快乐无穷",
+      "category": "humor",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.3,
+      "tags": ["快乐", "无穷", "幽默"],
+      "isActive": true
+    },
+    {
+      "id": "quote_011",
+      "text": "在格子间里，找到属于你的释放方式",
+      "category": "inspirational",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.0,
+      "tags": ["格子间", "释放", "方式"],
+      "isActive": true
+    },
+    {
+      "id": "quote_012",
+      "text": "工作再累，也要记得扔便便的乐趣",
+      "category": "motivation",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.2,
+      "tags": ["工作", "累", "乐趣"],
+      "isActive": true
+    },
+    {
+      "id": "quote_013",
+      "text": "青春奋斗路，便便相伴",
+      "category": "inspirational",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.1,
+      "tags": ["青春", "奋斗", "相伴"],
+      "isActive": true
+    },
+    {
+      "id": "quote_014",
+      "text": "释放压力，从扔便便开始",
+      "category": "motivation",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.0,
+      "tags": ["释放", "压力", "开始"],
+      "isActive": true
+    },
+    {
+      "id": "quote_015",
+      "text": "在办公室里，做一个快乐的扔便便者",
+      "category": "humor",
+      "author": "系统",
+      "createdAt": "2025-01-20T00:00:00Z",
+      "usageCount": 0,
+      "effectiveness": 4.2,
+      "tags": ["办公室", "快乐", "扔便便者"],
+      "isActive": true
+    }
+  ],
+  "metadata": {
+    "totalQuotes": 15,
+    "categoriesCount": 4,
+    "averageEffectiveness": 4.15,
+    "mostUsedCategory": "motivation",
+    "lastQuoteAdded": "2025-01-20T00:00:00Z"
+  }
+}

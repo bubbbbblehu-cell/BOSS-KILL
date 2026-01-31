@@ -1,0 +1,15 @@
+{
+  "name": "boss-kill-quotes-demo",
+  "version": "1.0.0",
+  "description": "BOSS KILL 激励文字API演示",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node demo-client.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "sqlite3": "^5.1.6"
+  }
+}
