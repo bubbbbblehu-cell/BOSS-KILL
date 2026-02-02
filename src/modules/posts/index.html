@@ -1,13 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>发帖系统</title>
-    <link rel="stylesheet" href="../../shared/style.css">
+    <meta charset="UTF-8">
+    <title>BOSS KILL - 发帖系统</title>
+    <style>
+        /* 沿用你喜欢的深色 UI 风格 */
+        body { background-color: #0d1117; color: white; font-family: sans-serif; padding: 20px; }
+        .post-box { background: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 8px; }
+        textarea { width: 100%; background: #0d1117; color: white; border: 1px solid #30363d; border-radius: 4px; padding: 10px; margin-bottom: 10px; }
+        button { background: linear-gradient(90deg, #ff8a00, #e52e71); border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .post-item { border-bottom: 1px solid #30363d; padding: 10px 0; }
+        .back-btn { margin-bottom: 20px; display: inline-block; color: #ff8a00; text-decoration: none; }
+    </style>
 </head>
 <body>
-    <h1>发帖系统正在运行</h1>
-    <div id="post-container"></div>
+    <a href="../../../index.html" class="back-btn">← 返回主控中心</a>
+    
+    <div class="post-box">
+        <h2>发布动态</h2>
+        <textarea id="postContent" placeholder="想说点什么？"></textarea>
+        <button id="sendBtn">发布</button>
+    </div>
 
-    <script src="./post-client.js"></script>
+    <div id="postList">
+        <h3>动态广场</h3>
+        </div>
+
+    <script type="module">
+        import { createPost, fetchInspiration } from './post-logic.js';
+
+        const sendBtn = document.getElementById('sendBtn');
+        const postContent = document.getElementById('postContent');
+        const postList = document.getElementById('postList');
+
+        // 初始化：可以先从词库拿一句激励语
+        window.onload = async () => {
+            const quotes = await fetchInspiration();
+            postContent.placeholder = "随机激励：" + quotes[Math.floor(Math.random() * quotes.length)];
+        };
+
+        sendBtn.onclick = async () => {
+            if (!postContent.value) return alert("内容不能为空");
+            
+            const result = await createPost(postContent.value);
+            if (result.success) {
+                const item = document.createElement('div');
+                item.className = 'post-item';
+                item.innerHTML = `<small>${result.post.timestamp}</small><p>${result.post.content}</p>`;
+                postList.prepend(item);
+                postContent.value = '';
+            }
+        };
+    </script>
 </body>
 </html>
