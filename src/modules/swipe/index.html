@@ -2,93 +2,57 @@
 <html>
 <head>
     <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOSS KILL</title>
     <link rel="stylesheet" href="../../shared/global.css">
     <link rel="stylesheet" href="../../shared/style.css">
-</head>
+    <style>
+        .ranking-area { padding: 15px; background: #16161f; border-bottom: 1px solid #2d2d3a; }
+        .tab-group { display: flex; background: #0d0d12; border-radius: 10px; padding: 5px; margin-top: 10px; }
+        .tab-btn { flex: 1; border: none; background: none; color: #9ca3af; padding: 8px; cursor: pointer; border-radius: 8px; }
+        .tab-btn.active { background: #ff6b35; color: white; }
         
-        /* 划一划容器：增加滚动阴影 */
-        .swipe-section {
-            padding: 0 15px 100px;
-            height: calc(812px - 280px); /* 减去顶部和导航的高度 */
-            overflow-y: scroll;
-        }
+        .swipe-area { height: 500px; overflow-y: auto; padding: 15px; }
+        .boss-card { background: #1e1e2a; border-radius: 15px; margin-bottom: 15px; overflow: hidden; }
     </style>
 </head>
 <body>
     <div class="phone-frame">
-        <div class="ranking-section">
-            <h2 style="margin-bottom:15px; font-size:18px;">🏆 战力排行榜</h2>
-            <div class="tab-bar">
-                <div class="tab-item active" onclick="switchRank('day')">日</div>
-                <div class="tab-item" onclick="switchRank('week')">周</div>
-                <div class="tab-item" onclick="switchRank('month')">月</div>
-                <div class="tab-item" onclick="switchRank('year')">年</div>
+        <div class="ranking-area">
+            <h3 style="color: white;">🏆 战力排行榜</h3>
+            <div class="tab-group">
+                <button class="tab-btn active">日</button>
+                <button class="tab-btn">周</button>
+                <button class="tab-btn">月</button>
+                <button class="tab-btn">年</button>
             </div>
-            <div id="rankDisplay" class="rank-card">
-                </div>
         </div>
 
-        <div class="swipe-section" id="cardList">
+        <div class="swipe-area" id="cardList">
             </div>
 
         <nav class="bottom-nav">
-            <div class="nav-item active">🏠<span>首页</span></div>
-            <div class="nav-item" onclick="goTo('../map/index.html')">🗺️<span>地图</span></div>
-            <div class="nav-item" onclick="goTo('../draw/index.html')">🎨<span>画画</span></div>
+            <div class="nav-item active" onclick="location.href='./index.html'">🏠<span>首页</span></div>
+            <div class="nav-item" onclick="location.href='../map/index.html'">🗺️<span>地图</span></div>
+            <div class="nav-item" onclick="location.href='../draw/index.html'">🎨<span>画画</span></div>
         </nav>
     </div>
 
     <script src="./data.js"></script>
-    <script src="../../shared/common.js"></script>
     <script>
-        // --- 排行榜逻辑 ---
-        function switchRank(period) {
-            // 更新 Tab 样式
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // 更新数据展示
-            const data = RANKING_DATA[period];
-            document.getElementById('rankDisplay').innerHTML = `
-                <img src="${data.image}" style="width:50px; height:50px; border-radius:10px; margin-right:15px;">
-                <div style="flex:1">
-                    <div style="font-size:14px; color:var(--accent-orange)">${data.title}</div>
-                    <div style="font-weight:bold;">${data.author}</div>
-                </div>
-                <div style="text-align:right">
-                    <div style="font-size:12px; color:var(--text-secondary)">压力值</div>
-                    <div style="color:var(--accent-cyan)">${data.score}</div>
-                </div>
-            `;
-        }
-
-        // --- 划一划卡片渲染 ---
-        function renderCards() {
-            const container = document.getElementById('cardList');
-            container.innerHTML = BOSS_DATA.map(boss => `
-                <div class="boss-card" style="margin-bottom:20px; background:var(--bg-input); border-radius:20px; overflow:hidden;">
-                    <img src="${boss.avatar}" style="width:100%; height:180px; object-fit:cover;">
-                    <div style="padding:15px;">
-                        <h3 style="margin-bottom:5px;">${boss.name}</h3>
-                        <p style="font-size:12px; color:var(--text-secondary); line-height:1.4;">${boss.intro}</p>
-                        <button class="btn-primary" onclick="handleAttack(${boss.id})" style="margin-top:10px; width:100%; padding:8px; border:none; border-radius:8px; background:linear-gradient(90deg, #ff6b35, #ff9235); color:white;">⚡ 立即解压</button>
+        // 渲染首页卡片的逻辑
+        function render() {
+            const list = document.getElementById('cardList');
+            // 假设 data.js 里的变量名是 BOSS_DATA
+            list.innerHTML = BOSS_DATA.map(item => `
+                <div class="boss-card">
+                    <img src="${item.avatar}" style="width:100%; height:150px; object-fit:cover;">
+                    <div style="padding:10px;">
+                        <h4 style="color:white;">${item.name}</h4>
+                        <p style="color:#9ca3af; font-size:12px;">${item.intro}</p>
                     </div>
                 </div>
             `).join('');
         }
-
-        // 初始化加载
-        window.onload = () => {
-            switchRank('day');
-            renderCards();
-        };
-
-        function handleAttack(id) {
-            const boss = BOSS_DATA.find(b => b.id === id);
-            alert(`正在对 ${boss.name} 进行精神洗礼...`);
-        }
+        window.onload = render;
     </script>
 </body>
 </html>
