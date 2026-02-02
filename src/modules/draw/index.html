@@ -1,15 +1,30 @@
-<div class="draw-page">
-    <div class="page-header">
-        <span class="page-title">✏️ 画你的老板</span>
-        <button class="btn btn-primary" onclick="saveDrawing()">保存</button>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../../shared/style.css">
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="page-header"><span class="page-title">✏️ 画你的老板</span></div>
+        
+        <canvas id="drawCanvas" width="335" height="335" style="background:white; margin:20px;"></canvas>
+
+        <div class="draw-toolbar">
+            <button onclick="clearCanvas()">🗑️ 重画</button>
+        </div>
+
+        <nav class="bottom-nav">
+            <div onclick="location.href='../swipe/index.html'">🏠</div>
+            <div onclick="location.href='../map/index.html'">🗺️</div>
+            <div class="active">🎨</div>
+        </nav>
     </div>
-    <div class="canvas-container">
-        <canvas id="drawCanvas" width="335" height="335"></canvas>
-    </div>
-    <div class="sticker-panel" id="stickerPanel">
-        <div class="sticker-grid">
-            <span onclick="addSticker('👔')">👔</span>
-            </div>
-    </div>
-</div>
-<script src="./draw-logic.js"></script>
+
+    <script>
+        // 画板专用逻辑
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        // ... (此处填入你原代码中的 Canvas 绘图 JS) ...
+    </script>
+</body>
+</html>
