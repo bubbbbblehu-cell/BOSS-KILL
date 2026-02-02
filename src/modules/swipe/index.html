@@ -1,1 +1,58 @@
-<h1>登录页面正在开发中</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../shared/style.css">
+    <style>
+        .swipe-container { height: 100%; padding: 20px; padding-bottom: 100px; overflow-y: auto; }
+        .boss-card { 
+            background: var(--bg-input); border-radius: 20px; 
+            overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border-color);
+        }
+        .boss-info { padding: 15px; }
+        .tag { background: rgba(255,107,53,0.2); color: var(--accent-orange); padding: 4px 8px; border-radius: 6px; font-size: 12px; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="swipe-container" id="cardList">
+            </div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active">🏠<span>首页</span></div>
+            <div class="nav-item" onclick="goTo('../map/index.html')">🗺️<span>地图</span></div>
+            <div class="nav-item" onclick="goTo('../draw/index.html')">🎨<span>画画</span></div>
+        </nav>
+    </div>
+
+    <script src="./data.js"></script>
+    <script src="../../shared/common.js"></script>
+    <script>
+        // 渲染函数：一行行把 data.js 里的数据变成 HTML
+        function renderCards() {
+            const container = document.getElementById('cardList');
+            container.innerHTML = BOSS_DATA.map(boss => `
+                <div class="boss-card">
+                    <img src="${boss.avatar}" style="width:100%; height:200px; object-fit:cover;">
+                    <div class="boss-info">
+                        <h3>${boss.name}</h3>
+                        <div style="margin: 8px 0;">
+                            ${boss.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <p style="color:var(--text-secondary); font-size:14px;">${boss.intro}</p>
+                        <button onclick="handleAttack(${boss.id})" style="margin-top:15px; width:100%; padding:10px; border-radius:8px; background:var(--accent-orange); border:none; color:white;">发起进攻 ⚔️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleAttack(id) {
+            const boss = BOSS_DATA.find(b => b.id === id);
+            alert(`你对 ${boss.name} 发起了正义的背刺！压力值 -10`);
+        }
+
+        // 页面加载完毕后执行渲染
+        window.onload = renderCards;
+    </script>
+</body>
+</html>
