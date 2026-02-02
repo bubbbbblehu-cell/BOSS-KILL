@@ -6,44 +6,44 @@
     <link rel="stylesheet" href="../../shared/global.css">
     <link rel="stylesheet" href="../../shared/style.css">
     <style>
-        /* 局部布局：确保内容在手机框内滚动 */
-        .main-content {
-            height: calc(100% - 70px); /* 扣除底部导航高度 */
+        /* 修复截图中的空白问题：给排行榜固定高度 */
+        .ranking-container {
+            padding: 15px;
+            background: var(--bg-card);
+            min-height: 120px; /* 防止 image_204e45.png 中的塌陷 */
+        }
+        .swipe-list {
+            height: 520px; 
             overflow-y: auto;
-            padding-bottom: 20px;
+            padding: 15px;
         }
-        .ranking-header { padding: 15px; background: var(--bg-card); }
-        .boss-list { padding: 15px; }
-        
-        /* 针对 image_204e45.png 中的 Tab 样式优化 */
-        .tab-nav {
-            display: flex; background: #0d0d12; border-radius: 12px;
-            padding: 4px; margin-top: 10px;
+        /* 针对 image_2a384a.png 的标签样式 */
+        .boss-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--accent-orange);
+            margin-right: 5px;
         }
-        .tab-btn {
-            flex: 1; border: none; background: none; color: #9ca3af;
-            padding: 10px 0; cursor: pointer; border-radius: 10px; transition: 0.3s;
-        }
-        .tab-btn.active { background: var(--accent-orange); color: white; }
     </style>
 </head>
 <body>
     <div class="phone-frame">
-        <div class="main-content">
-            <div class="ranking-header">
-                <h3 style="display:flex; align-items:center; gap:8px;">🏆 战力排行榜</h3>
-                <div class="tab-nav">
-                    <button class="tab-btn active" onclick="changeTab(this, 'day')">日</button>
-                    <button class="tab-btn" onclick="changeTab(this, 'week')">周</button>
-                    <button class="tab-btn" onclick="changeTab(this, 'month')">月</button>
-                    <button class="tab-btn" onclick="changeTab(this, 'year')">年</button>
-                </div>
-                <div id="topRank" style="margin-top:15px;"></div>
+        <div class="ranking-container">
+            <h3 style="font-size: 16px; margin-bottom: 10px;">🏆 战力排行榜</h3>
+            <div class="tab-bar">
+                <div class="tab-item active" onclick="updateRank('day')">日</div>
+                <div class="tab-item" onclick="updateRank('week')">周</div>
+                <div class="tab-item" onclick="updateRank('month')">月</div>
+                <div class="tab-item" onclick="updateRank('year')">年</div>
             </div>
-
-            <div class="boss-list" id="bossContainer">
+            <div id="rankDetail" style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
                 </div>
         </div>
+
+        <div class="swipe-list" id="bossCards">
+            </div>
 
         <nav class="bottom-nav">
             <div class="nav-item active">🏠<span>首页</span></div>
@@ -54,57 +54,47 @@
     </div>
 
     <script src="./data.js"></script>
-    <script src="../../shared/navigation.js"></script>
-    
     <script>
-        // 初始化渲染：将 data.js 里的 BOSS_DATA 转化为 HTML
-        function initSwipePage() {
-            const container = document.getElementById('bossContainer');
-            // 一行行构建卡片
+        // 渲染排行榜作品
+        function updateRank(type) {
+            const detail = document.getElementById('rankDetail');
+            // 切换 Tab 样式
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const data = RANKING_DATA[type]; // 确保 data.js 里有这个变量
+            detail.innerHTML = `
+                <img src="${data.image}" style="width:40px; height:40px; border-radius:5px;">
+                <div style="flex:1">
+                    <div style="font-size:12px; color:var(--accent-orange)">${data.title}</div>
+                    <div style="font-weight:bold;">${data.author}</div>
+                </div>
+                <div style="text-align:right; font-family: monospace; color:var(--accent-cyan)">${data.score}</div>
+            `;
+        }
+
+        // 渲染划一划卡片 (对应 image_2a384a.png)
+        function renderBosses() {
+            const container = document.getElementById('bossCards');
             container.innerHTML = BOSS_DATA.map(boss => `
-                <div class="boss-card" style="background:var(--bg-input); border-radius:18px; overflow:hidden; margin-bottom:15px; border:1px solid var(--border-color);">
-                    <img src="${boss.avatar}" style="width:100%; height:160px; object-fit:cover;">
-                    <div style="padding:15px;">
-                        <h4 style="font-size:16px;">${boss.name}</h4>
-                        <p style="color:var(--text-secondary); font-size:12px; margin:8px 0;">${boss.intro}</p>
-                        <div style="display:flex; gap:10px;">
-                            ${boss.tags.map(t => `<span style="font-size:10px; color:var(--accent-orange); background:rgba(255,107,53,0.1); padding:2px 6px; border-radius:4px;">${t}</span>`).join('')}
+                <div class="boss-card" style="background:var(--bg-input); border-radius:15px; margin-bottom:15px; overflow:hidden; border:1px solid #2d2d3a;">
+                    <img src="${boss.avatar}" style="width:100%; height:150px; object-fit:cover;">
+                    <div style="padding:12px;">
+                        <h4 style="margin-bottom:5px;">${boss.name}</h4>
+                        <p style="font-size:12px; color:#9ca3af; margin-bottom:10px;">${boss.intro}</p>
+                        <div>
+                            ${boss.tags.map(tag => `<span class="boss-tag">${tag}</span>`).join('')}
                         </div>
                     </div>
                 </div>
             `).join('');
-            
-            // 默认显示日榜作品
-            updateRankDisplay('day');
         }
 
-        // 处理 Tab 切换
-        function changeTab(btn, period) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            updateRankDisplay(period);
-        }
-
-        function updateRankDisplay(period) {
-            const rankBox = document.getElementById('topRank');
-            // 这里从 data.js 里的 RANKING_DATA 读取
-            const topItem = RANKING_DATA[period];
-            rankBox.innerHTML = `
-                <div style="background:rgba(255,107,53,0.05); border:1px dashed var(--accent-orange); border-radius:12px; padding:10px; display:flex; align-items:center; gap:12px;">
-                    <img src="${topItem.image}" style="width:45px; height:45px; border-radius:8px;">
-                    <div>
-                        <div style="font-size:12px; color:var(--accent-orange)">${topItem.title}</div>
-                        <div style="font-weight:bold; font-size:14px;">${topItem.author}</div>
-                    </div>
-                    <div style="margin-left:auto; text-align:right;">
-                        <div style="font-size:10px; color:var(--text-secondary)">热度值</div>
-                        <div style="color:var(--accent-cyan); font-weight:bold;">${topItem.score}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        window.onload = initSwipePage;
+        // 页面启动
+        window.onload = () => {
+            renderBosses();
+            updateRank('day');
+        };
     </script>
 </body>
 </html>
