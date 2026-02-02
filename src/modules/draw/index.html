@@ -5,26 +5,37 @@
 </head>
 <body>
     <div class="phone-frame">
-        <div class="page-header"><span class="page-title">✏️ 画你的老板</span></div>
+        <div style="padding:45px 20px 15px; font-weight:bold;">✏️ 画你的老板</div>
+        <canvas id="drawCanvas" width="335" height="400" style="background:white; margin:20px; border-radius:20px;"></canvas>
         
-        <canvas id="drawCanvas" width="335" height="335" style="background:white; margin:20px;"></canvas>
-
-        <div class="draw-toolbar">
-            <button onclick="clearCanvas()">🗑️ 重画</button>
+        <div style="display:flex; justify-content:center; gap:20px;">
+            <button onclick="clearCanvas()" style="padding:10px 20px; border-radius:10px; border:none;">🗑️ 清空</button>
+            <button onclick="save()" style="padding:10px 20px; background:var(--accent-cyan); border-radius:10px; border:none; color:white;">💾 保存</button>
         </div>
 
         <nav class="bottom-nav">
-            <div onclick="location.href='../swipe/index.html'">🏠</div>
-            <div onclick="location.href='../map/index.html'">🗺️</div>
-            <div class="active">🎨</div>
+            <div class="nav-item" onclick="goTo('../swipe/index.html')">🏠<span>首页</span></div>
+            <div class="nav-item" onclick="goTo('../map/index.html')">🗺️<span>地图</span></div>
+            <div class="nav-item active">🎨<span>画画</span></div>
         </nav>
     </div>
 
+    <script src="../../shared/common.js"></script>
     <script>
-        // 画板专用逻辑
         const canvas = document.getElementById('drawCanvas');
         const ctx = canvas.getContext('2d');
-        // ... (此处填入你原代码中的 Canvas 绘图 JS) ...
+        let painting = false;
+
+        canvas.onmousedown = () => painting = true;
+        canvas.onmouseup = () => { painting = false; ctx.beginPath(); };
+        canvas.onmousemove = (e) => {
+            if(!painting) return;
+            ctx.lineWidth = 5; ctx.lineCap = 'round';
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        };
+        function clearCanvas() { ctx.clearRect(0,0,335,400); }
     </script>
 </body>
 </html>
