@@ -2,38 +2,19 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>BOSS KILL - 首页导航</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOSS KILL</title>
+    <link rel="stylesheet" href="./src/shared/global.css">
     <link rel="stylesheet" href="./src/shared/style.css">
-    <style>
-        /* 2. 这里可以放一点首页特有的布局样式 */
-        .feature-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 20px;
-            max-width: 400px;
-            margin: 50px auto;
-        }
-        button {
-            padding: 15px;
-            border-radius: 12px;
-            border: none;
-            background: var(--accent-orange); /* 使用 CSS 变量 */
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        button:active { transform: scale(0.95); }
-    </style>
 </head>
-<body>
-    <div class="feature-grid">
-        <button onclick="location.href='./src/modules/auth/index.html'">🔑 登录认证</button>
-        <button onclick="location.href='./src/modules/posts/index.html'">📝 发帖系统</button>
-        <button onclick="location.href='./src/modules/swipe/index.html'">🎴 划一划</button>
-        <button onclick="location.href='./src/modules/map/index.html'">🗺️ 地图探索</button>
-        <button onclick="location.href='./src/modules/profile/index.html'">👤 个人中心</button>
+<body class="phone-frame"> <div class="feature-grid">
+        <button onclick="location.href='./src/modules/auth/index.html'">登录认证</button>
+        <button onclick="location.href='./src/modules/posts/index.html'">发帖系统</button>
+        <button onclick="location.href='./src/modules/swipe/index.html'">划一划</button>
+        <button onclick="location.href='./src/modules/map/index.html'">地图探索</button>
+        <button onclick="location.href='./src/modules/profile/index.html'">个人中心</button>
     </div>
+    
+    <script src="./src/shared/navigation.js"></script>
 </body>
 </html>
