@@ -1,16 +1,35 @@
-<link rel="stylesheet" href="../../shared/style.css">
-<div class="map-page">
-    <div class="map-stats">
-        <div class="stat-card">
-            <div class="stat-value" id="poopCount">0</div>
-            <div class="stat-label">便便数</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../shared/style.css">
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="map-stats">
+            <div class="stat-card">便便数: <span id="poopCount">0</span></div>
         </div>
+        
+        <div id="mapContainer" class="map-container" style="height:100%; background:#0a1628;">
+            <div class="map-grid"></div>
         </div>
-    <div class="map-container" id="mapContainer">
-        <div class="map-grid"></div>
+
+        <button class="map-btn map-btn-poop" onclick="throwPoop()" style="position:absolute; bottom:100px; left:50%; transform:translateX(-50%);">💩</button>
+
+        <nav class="bottom-nav">
+            <div onclick="location.href='../swipe/index.html'">🏠</div>
+            <div class="active">🗺️</div>
+            <div onclick="location.href='../draw/index.html'">🎨</div>
+        </nav>
     </div>
-    <div class="map-controls">
-        <button class="map-btn map-btn-poop" onclick="throwPoop()">💩</button>
-    </div>
-</div>
-<script src="./map-logic.js"></script>
+
+    <script>
+        // 只属于地图的逻辑
+        function throwPoop() {
+            const count = document.getElementById('poopCount');
+            count.innerText = parseInt(count.innerText) + 1;
+            // ... 之前的生成便便代码 ...
+        }
+    </script>
+</body>
+</html>
