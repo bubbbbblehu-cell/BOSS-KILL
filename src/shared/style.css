@@ -1,0 +1,35 @@
+/* 提取自原代码：核心色彩与全局定义 */
+:root {
+    --bg-dark: #0d0d12;
+    --bg-card: #16161f;
+    --accent-orange: #ff6b35;
+    --accent-purple: #8b5cf6;
+    --accent-cyan: #06b6d4;
+    --text-primary: #ffffff;
+    --border-color: #2d2d3a;
+}
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg-dark);
+    margin: 0;
+    color: white;
+}
+
+/* 底部通用导航栏样式 */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    background: rgba(22, 22, 31, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border-color);
+    position: fixed; /* 改为 fixed，适应不同页面 */
+    bottom: 0; left: 0; right: 0;
+}
+
+.nav-item { 
+    display: flex; flex-direction: column; align-items: center; cursor: pointer; 
+}
+/* ...其他通用按钮样式 .btn, .btn-primary 等也放在这里... */
