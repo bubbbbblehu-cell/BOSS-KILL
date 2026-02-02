@@ -2,19 +2,61 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BOSS KILL</title>
     <link rel="stylesheet" href="./src/shared/global.css">
     <link rel="stylesheet" href="./src/shared/style.css">
 </head>
-<body class="phone-frame"> <div class="feature-grid">
-        <button onclick="location.href='./src/modules/auth/index.html'">登录认证</button>
-        <button onclick="location.href='./src/modules/posts/index.html'">发帖系统</button>
-        <button onclick="location.href='./src/modules/swipe/index.html'">划一划</button>
-        <button onclick="location.href='./src/modules/map/index.html'">地图探索</button>
-        <button onclick="location.href='./src/modules/profile/index.html'">个人中心</button>
+<body class="phone-body">
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="logo-text">BOSS KILL</h1>
+        </header>
+
+        <main class="feature-grid">
+            <div class="module-card" onclick="location.href='./src/modules/map/index.html'">
+                <span class="card-icon">🗺️</span>
+                <div class="card-info">
+                    <h3>地图探索</h3>
+                    <p>占领你的领地</p>
+                </div>
+            </div>
+
+            <div class="module-card" onclick="location.href='./src/modules/swipe/index.html'">
+                <span class="card-icon">🎴</span>
+                <div class="card-info">
+                    <h3>划一划</h3>
+                    <p>发现热门吐槽</p>
+                </div>
+            </div>
+
+            <div class="module-card" onclick="location.href='./src/modules/posts/index.html'">
+                <span class="card-icon">📝</span>
+                <div class="card-info">
+                    <h3>发布系统</h3>
+                    <p>写下你的灵感</p>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="location.href='index.html'">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">首页</span>
+            </div>
+            <div class="nav-item" onclick="location.href='./src/modules/map/index.html'">
+                <span class="nav-icon">🗺️</span>
+                <span class="nav-label">地图</span>
+            </div>
+            <div class="nav-item" onclick="location.href='./src/modules/swipe/index.html'">
+                <span class="nav-icon">🎨</span>
+                <span class="nav-label">画画</span>
+            </div>
+            <div class="nav-item" onclick="location.href='./src/modules/profile/index.html'">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">我的</span>
+            </div>
+        </nav>
     </div>
-    
-    <script src="./src/shared/navigation.js"></script>
 </body>
 </html>
