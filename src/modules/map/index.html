@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <link rel="stylesheet" href="../../shared/style.css">
+    <style>
+        .map-container { height: 100%; background: #0a1628; position: relative; }
+        .map-poop { position: absolute; font-size: 24px; animation: poopDrop 0.5s ease-out; }
+        @keyframes poopDrop { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
 </head>
 <body>
     <div class="phone-frame">
-        <div class="map-stats">
-            <div class="stat-card">便便数: <span id="poopCount">0</span></div>
+        <div class="map-container" id="mapContainer">
+            <div style="padding: 50px 20px; display:flex; gap:10px;">
+                <div class="stat-card" style="background:rgba(0,0,0,0.5); padding:10px; border-radius:10px;">
+                    便便: <span id="poopCount">0</span>
+                </div>
+            </div>
+            <button onclick="throwPoop()" style="position:absolute; bottom:100px; left:50%; transform:translateX(-50%); width:70px; height:70px; border-radius:50%; font-size:30px; border:none; background:var(--accent-orange);">💩</button>
         </div>
-        
-        <div id="mapContainer" class="map-container" style="height:100%; background:#0a1628;">
-            <div class="map-grid"></div>
-        </div>
-
-        <button class="map-btn map-btn-poop" onclick="throwPoop()" style="position:absolute; bottom:100px; left:50%; transform:translateX(-50%);">💩</button>
 
         <nav class="bottom-nav">
-            <div onclick="location.href='../swipe/index.html'">🏠</div>
-            <div class="active">🗺️</div>
-            <div onclick="location.href='../draw/index.html'">🎨</div>
+            <div class="nav-item" onclick="goTo('../swipe/index.html')">🏠<span>首页</span></div>
+            <div class="nav-item active">🗺️<span>地图</span></div>
+            <div class="nav-item" onclick="goTo('../draw/index.html')">🎨<span>画画</span></div>
         </nav>
     </div>
 
+    <script src="../../shared/common.js"></script>
     <script>
-        // 只属于地图的逻辑
         function throwPoop() {
             const count = document.getElementById('poopCount');
             count.innerText = parseInt(count.innerText) + 1;
-            // ... 之前的生成便便代码 ...
+            
+            const p = document.createElement('div');
+            p.className = 'map-poop';
+            p.innerText = '💩';
+            p.style.left = Math.random() * 80 + 10 + '%';
+            p.style.top = Math.random() * 80 + 10 + '%';
+            document.getElementById('mapContainer').appendChild(p);
         }
     </script>
 </body>
