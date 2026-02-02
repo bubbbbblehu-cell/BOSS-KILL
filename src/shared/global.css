@@ -1,1 +1,1888 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BOSS KILL - 功能交互测试</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0d0d12;
+            --bg-card: #16161f;
+            --bg-input: #1e1e2a;
+            --accent-orange: #ff6b35;
+            --accent-yellow: #ffc107;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-pink: #ec4899;
+            --accent-red: #ef4444;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --border-color: #2d2d3a;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 手机模拟器容器 */
+        .phone-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: var(--bg-card);
+            border-radius: 40px;
+            border: 3px solid #333;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .phone-notch {
+            width: 150px;
+            height: 30px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 页面容器 */
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 70px;
+            background: rgba(22, 22, 31, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding-bottom: 15px;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-icon {
+            color: var(--accent-orange);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--accent-orange);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* 页面头部 */
+        .page-header {
+            height: 90px;
+            padding: 45px 20px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* 页面内容 */
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        /* ========== 登录页面 ========== */
+        .login-page {
+            background: linear-gradient(180deg, #1a1a2e 0%, #0d0d12 100%);
+        }
+
+        .login-logo {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+
+        .login-logo .emoji {
+            font-size: 80px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .login-logo h1 {
+            font-size: 32px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #ff6b35, #ffc107);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-orange);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #ff8c5a);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-guest {
+            background: transparent;
+            color: var(--text-secondary);
+            text-decoration: underline;
+        }
+
+        /* ========== 首页/滑一滑 ========== */
+        .swipe-page {
+            background: var(--bg-dark);
+        }
+
+        .banner-section {
+            padding: 50px 15px 15px;
+        }
+
+        .banner-title {
+            font-size: 14px;
+            color: var(--accent-orange);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .banner-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: none;
+        }
+
+        .banner-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .banner-card {
+            min-width: 200px;
+            height: 120px;
+            background: linear-gradient(135deg, #2a2a3a, #1a1a25);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .banner-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent-orange);
+        }
+
+        .banner-rank {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #ff6b35, #ffc107);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .banner-info h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .banner-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 内容卡片 */
+        .content-feed {
+            padding: 15px;
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #2a2a3a, #3a3a4a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            position: relative;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .card-title {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .action-btn.liked {
+            color: var(--accent-red);
+        }
+
+        .action-btn.favorited {
+            color: var(--accent-yellow);
+        }
+
+        /* ========== 地图页面 ========== */
+        .map-page {
+            background: #0a1628;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(180deg, #0a1628 0%, #162a4a 50%, #0a1628 100%);
+            overflow: hidden;
+        }
+
+        .map-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .map-poop {
+            position: absolute;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            animation: poopDrop 0.5s ease-out;
+        }
+
+        @keyframes poopDrop {
+            0% { transform: translateY(-100px) scale(0); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .map-poop:hover {
+            transform: scale(1.3);
+        }
+
+        .map-tower {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .tower-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            font-size: 20px;
+            line-height: 0.8;
+        }
+
+        .tower-label {
+            font-size: 10px;
+            background: var(--accent-orange);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        .map-controls {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .map-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .map-btn-poop {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
+
+        .map-btn-poop:hover {
+            transform: scale(1.1);
+        }
+
+        .map-stats {
+            position: absolute;
+            top: 50px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: rgba(22, 22, 31, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== 绘画页面 ========== */
+        .draw-page {
+            background: #1a1a25;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px 20px;
+        }
+
+        .drawing-canvas {
+            width: 100%;
+            max-width: 335px;
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 20px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .draw-toolbar {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .tool-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            background: var(--bg-input);
+            transition: all 0.3s;
+        }
+
+        .tool-btn:hover, .tool-btn.active {
+            background: var(--accent-purple);
+            transform: scale(1.1);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-dot:hover, .color-dot.active {
+            transform: scale(1.2);
+            border-color: white;
+        }
+
+        .sticker-panel {
+            display: none;
+            position: absolute;
+            bottom: 150px;
+            left: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .sticker-panel.show {
+            display: block;
+        }
+
+        .sticker-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .sticker-item {
+            font-size: 32px;
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .sticker-item:hover {
+            background: var(--bg-input);
+            transform: scale(1.2);
+        }
+
+        /* ========== 个人中心 ========== */
+        .profile-page {
+            background: var(--bg-dark);
+        }
+
+        .profile-header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            background: linear-gradient(180deg, #2a2a3a 0%, var(--bg-dark) 100%);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 15px;
+            border: 3px solid var(--bg-dark);
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .profile-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .profile-menu {
+            padding: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px;
+            background: var(--bg-card);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: var(--bg-input);
+            border-color: var(--accent-purple);
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+        }
+
+        .menu-arrow {
+            color: var(--text-secondary);
+        }
+
+        /* ========== 弹窗 ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 320px;
+            text-align: center;
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-emoji {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .modal-desc {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            background: var(--accent-orange);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* ========== 动画演示页 ========== */
+        .demo-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: #000;
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-overlay.show {
+            display: flex;
+        }
+
+        .demo-content {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .demo-emoji {
+            font-size: 120px;
+            animation: demoAnim 2s infinite;
+        }
+
+        @keyframes demoAnim {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1) rotate(5deg); }
+            75% { transform: scale(1.1) rotate(-3deg); }
+        }
+
+        .demo-text {
+            font-size: 24px;
+            margin-top: 30px;
+            color: var(--accent-orange);
+            font-weight: 700;
+        }
+
+        .demo-quote {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-top: 15px;
+            max-width: 280px;
+            line-height: 1.6;
+        }
+
+        .demo-skip {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .demo-progress {
+            position: absolute;
+            bottom: 100px;
+            left: 30px;
+            right: 30px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .demo-progress-bar {
+            height: 100%;
+            background: var(--accent-orange);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Toast 通知 */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 15px 25px;
+            border-radius: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 控制台面板 */
+        .console-panel {
+            position: fixed;
+            bottom: 0;
+            left: 420px;
+            right: 20px;
+            height: 300px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .console-header {
+            padding: 12px 15px;
+            background: #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .console-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+
+        .console-clear {
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .console-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .console-log {
+            padding: 6px 10px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.03);
+            display: flex;
+            gap: 10px;
+        }
+
+        .console-log.request {
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .console-log.response {
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .console-log.error {
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .console-log.event {
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .log-time {
+            color: #666;
+            min-width: 80px;
+        }
+
+        .log-type {
+            min-width: 70px;
+            font-weight: 500;
+        }
+
+        .log-type.req { color: var(--accent-cyan); }
+        .log-type.res { color: var(--accent-green); }
+        .log-type.err { color: var(--accent-red); }
+        .log-type.evt { color: var(--accent-purple); }
+
+        .log-content {
+            color: #ccc;
+            word-break: break-all;
+        }
+
+        @media (max-width: 900px) {
+            .console-panel {
+                display: none;
+            }
+            .phone-container {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- 手机模拟器 -->
+        <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+                
+                <!-- 登录演示动画 -->
+                <div class="demo-overlay" id="demoOverlay">
+                    <button class="demo-skip" onclick="skipDemo()">跳过 →</button>
+                    <div class="demo-content">
+                        <div class="demo-emoji" id="demoEmoji">👔</div>
+                        <div class="demo-text" id="demoText">这是你的老板...</div>
+                        <div class="demo-quote" id="demoQuote"></div>
+                    </div>
+                    <div class="demo-progress">
+                        <div class="demo-progress-bar" id="demoProgress"></div>
+                    </div>
+                </div>
+
+                <!-- 登录页面 -->
+                <div class="page login-page active" id="loginPage">
+                    <div class="login-logo">
+                        <div class="emoji">💩</div>
+                        <h1>BOSS KILL</h1>
+                        <p style="color: var(--text-secondary); margin-top: 10px;">释放压力，扔掉烦恼</p>
+                    </div>
+                    <div class="login-form">
+                        <div class="form-group">
+                            <label class="form-label">邮箱</label>
+                            <input type="email" class="form-input" id="loginEmail" placeholder="请输入邮箱" value="test@bosskill.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" value="123456">
+                        </div>
+                        <button class="btn btn-primary" onclick="handleLogin()">登 录</button>
+                        <button class="btn btn-secondary" onclick="handleRegister()">注册新账号</button>
+                        <button class="btn btn-guest" onclick="handleGuestLogin()">以游客身份进入</button>
+                    </div>
+                </div>
+
+                <!-- 首页/滑一滑 -->
+                <div class="page swipe-page" id="swipePage">
+                    <div class="banner-section">
+                        <div class="banner-title">🔥 Top3 热门作品</div>
+                        <div class="banner-scroll" id="bannerScroll">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                    <div class="content-feed" id="contentFeed">
+                        <!-- 动态生成 -->
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item active" onclick="switchPage('swipe')">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-label">首页</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('map')">
+                            <span class="nav-icon">🗺️</span>
+                            <span class="nav-label">地图</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('draw')">
+                            <span class="nav-icon">🎨</span>
+                            <span class="nav-label">画画</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('profile')">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-label">我的</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 地图页面 -->
+                <div class="page map-page" id="mapPage">
+                    <div class="map-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="poopCount">0</div>
+                            <div class="stat-label">便便数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="towerCount">0</div>
+                            <div class="stat-label">屎塔数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="buildingCount">0</div>
+                            <div class="stat-label">占领建筑</div>
+                        </div>
+                    </div>
+                    <div class="map-container" id="mapContainer">
+                        <div class="map-grid"></div>
+                        <!-- 动态生成便便和屎塔 -->
+                    </div>
+                    <div class="map-controls">
+                        <button class="map-btn map-btn-poop" onclick="throwPoop()">💩</button>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item" onclick="switchPage('swipe')">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-label">首页</span>
+                        </div>
+                        <div class="nav-item active" onclick="switchPage('map')">
+                            <span class="nav-icon">🗺️</span>
+                            <span class="nav-label">地图</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('draw')">
+                            <span class="nav-icon">🎨</span>
+                            <span class="nav-label">画画</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('profile')">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-label">我的</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 绘画页面 -->
+                <div class="page draw-page" id="drawPage">
+                    <div class="page-header">
+                        <span class="page-title">✏️ 画你的老板</span>
+                        <button class="btn btn-primary" style="width: auto; padding: 8px 16px; margin: 0;" onclick="saveDrawing()">保存</button>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas class="drawing-canvas" id="drawCanvas" width="335" height="335"></canvas>
+                    </div>
+                    <div class="sticker-panel" id="stickerPanel">
+                        <div class="sticker-grid">
+                            <span class="sticker-item" onclick="addSticker('👔')">👔</span>
+                            <span class="sticker-item" onclick="addSticker('👓')">👓</span>
+                            <span class="sticker-item" onclick="addSticker('👃')">👃</span>
+                            <span class="sticker-item" onclick="addSticker('👄')">👄</span>
+                            <span class="sticker-item" onclick="addSticker('👂')">👂</span>
+                            <span class="sticker-item" onclick="addSticker('🧑‍💼')">🧑‍💼</span>
+                            <span class="sticker-item" onclick="addSticker('💼')">💼</span>
+                            <span class="sticker-item" onclick="addSticker('📱')">📱</span>
+                            <span class="sticker-item" onclick="addSticker('💰')">💰</span>
+                            <span class="sticker-item" onclick="addSticker('🔥')">🔥</span>
+                        </div>
+                    </div>
+                    <div class="color-picker">
+                        <div class="color-dot active" style="background: #000" onclick="setColor('#000', this)"></div>
+                        <div class="color-dot" style="background: #ff0000" onclick="setColor('#ff0000', this)"></div>
+                        <div class="color-dot" style="background: #ff6b35" onclick="setColor('#ff6b35', this)"></div>
+                        <div class="color-dot" style="background: #ffc107" onclick="setColor('#ffc107', this)"></div>
+                        <div class="color-dot" style="background: #10b981" onclick="setColor('#10b981', this)"></div>
+                        <div class="color-dot" style="background: #06b6d4" onclick="setColor('#06b6d4', this)"></div>
+                        <div class="color-dot" style="background: #8b5cf6" onclick="setColor('#8b5cf6', this)"></div>
+                        <div class="color-dot" style="background: #ec4899" onclick="setColor('#ec4899', this)"></div>
+                    </div>
+                    <div class="draw-toolbar">
+                        <button class="tool-btn active" onclick="setTool('brush', this)">✏️</button>
+                        <button class="tool-btn" onclick="toggleStickers()">😀</button>
+                        <button class="tool-btn" onclick="undoDrawing()">↩️</button>
+                        <button class="tool-btn" onclick="redoDrawing()">↪️</button>
+                        <button class="tool-btn" onclick="clearCanvas()">🗑️</button>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item" onclick="switchPage('swipe')">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-label">首页</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('map')">
+                            <span class="nav-icon">🗺️</span>
+                            <span class="nav-label">地图</span>
+                        </div>
+                        <div class="nav-item active" onclick="switchPage('draw')">
+                            <span class="nav-icon">🎨</span>
+                            <span class="nav-label">画画</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('profile')">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-label">我的</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 个人中心 -->
+                <div class="page profile-page" id="profilePage">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-name" id="profileName">游客用户</div>
+                        <div class="profile-email" id="profileEmail">未绑定邮箱</div>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userPoints">120</div>
+                                <div class="profile-stat-label">积分</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userWorks">5</div>
+                                <div class="profile-stat-label">作品</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value" id="userCheckin">7</div>
+                                <div class="profile-stat-label">连续打卡</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-menu">
+                        <div class="menu-item" onclick="handleCheckin()">
+                            <div class="menu-left">
+                                <span class="menu-icon">📅</span>
+                                <span>每日打卡</span>
+                            </div>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                        <div class="menu-item" onclick="showMyWorks()">
+                            <div class="menu-left">
+                                <span class="menu-icon">🎨</span>
+                                <span>我的作品</span>
+                            </div>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                        <div class="menu-item" onclick="showFavorites()">
+                            <div class="menu-left">
+                                <span class="menu-icon">⭐</span>
+                                <span>我的收藏</span>
+                            </div>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                        <div class="menu-item" onclick="showNotifications()">
+                            <div class="menu-left">
+                                <span class="menu-icon">🔔</span>
+                                <span>消息通知</span>
+                            </div>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                        <div class="menu-item" onclick="handleLogout()">
+                            <div class="menu-left">
+                                <span class="menu-icon">🚪</span>
+                                <span>退出登录</span>
+                            </div>
+                            <span class="menu-arrow">→</span>
+                        </div>
+                    </div>
+                    <div class="bottom-nav">
+                        <div class="nav-item" onclick="switchPage('swipe')">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-label">首页</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('map')">
+                            <span class="nav-icon">🗺️</span>
+                            <span class="nav-label">地图</span>
+                        </div>
+                        <div class="nav-item" onclick="switchPage('draw')">
+                            <span class="nav-icon">🎨</span>
+                            <span class="nav-label">画画</span>
+                        </div>
+                        <div class="nav-item active" onclick="switchPage('profile')">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-label">我的</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API控制台 -->
+        <div class="console-panel">
+            <div class="console-header">
+                <span class="console-title">📡 API 调用日志</span>
+                <button class="console-clear" onclick="clearConsole()">清空</button>
+            </div>
+            <div class="console-body" id="consoleBody">
+                <div class="console-log event">
+                    <span class="log-time">--:--:--</span>
+                    <span class="log-type evt">[系统]</span>
+                    <span class="log-content">等待用户操作...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal-overlay" id="drawPromptModal">
+        <div class="modal-content">
+            <div class="modal-emoji">🎨</div>
+            <div class="modal-title">你也要画一个吗？</div>
+            <div class="modal-desc">释放你的创意，画出你老板的样子，扔到地图上去！</div>
+            <button class="modal-close" onclick="goToDraw()">去画画</button>
+            <button class="btn btn-guest" style="margin-top: 10px;" onclick="closeModal('drawPromptModal')">下次再说</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==================== 全局状态 ====================
+        const appState = {
+            isLoggedIn: false,
+            isGuest: false,
+            user: null,
+            points: 120,
+            poopCount: 0,
+            towerCount: 0,
+            buildingCount: 0,
+            checkinDays: 7,
+            works: 5,
+            likedContents: new Set(),
+            favoritedContents: new Set()
+        };
+
+        // 激励文字库
+        const motivationalQuotes = [
+            "在最好的青春里，在格子间里激励自己开出最美的花！",
+            "工作虽苦，但扔大便的快乐谁懂？",
+            "老板再坏，也挡不住你扔便便的决心！",
+            "每一坨便便，都是对996的无声抗议",
+            "今天你扔的不是便便，是对未来的期许",
+            "压力大？那就多扔几坨！",
+            "打工人打工魂，扔便便解压才是人上人"
+        ];
+
+        // Top3 数据
+        const top3Data = [
+            { id: 'top1', rank: 1, title: '秃头老板', author: '打工人A', likes: 1520, dislikes: 23 },
+            { id: 'top2', rank: 2, title: '穿格子衫的PM', author: '码农小王', likes: 1280, dislikes: 45 },
+            { id: 'top3', rank: 3, title: '加班狂魔', author: '摸鱼达人', likes: 986, dislikes: 12 }
+        ];
+
+        // 内容流数据
+        const contentData = [
+            { id: 'c1', emoji: '👔', title: '我的老板每天穿同一件衣服', desc: '画了一个永远穿西装的老板', author: '小明', likes: 328, favorites: 56 },
+            { id: 'c2', emoji: '🤓', title: '戴眼镜的项目经理', desc: '总是盯着你的工位看', author: '程序猿', likes: 456, favorites: 89 },
+            { id: 'c3', emoji: '😤', title: '开会最爱说的那个人', desc: '这个需求很简单嘛', author: '产品汪', likes: 892, favorites: 156 }
+        ];
+
+        // ==================== 日志系统 ====================
+        function log(type, method, path, data = null) {
+            const consoleBody = document.getElementById('consoleBody');
+            const time = new Date().toLocaleTimeString();
+            const typeClass = { request: 'req', response: 'res', error: 'err', event: 'evt' }[type] || 'evt';
+            const typeLabel = { request: 'REQUEST', response: 'RESPONSE', error: 'ERROR', event: 'EVENT' }[type] || 'LOG';
+            
+            let content = '';
+            if (type === 'request') {
+                content = `${method} ${path}`;
+                if (data) content += ` | ${JSON.stringify(data)}`;
+            } else if (type === 'response') {
+                content = `${path} → ${JSON.stringify(data)}`;
+            } else if (type === 'error') {
+                content = data;
+            } else {
+                content = data || path;
+            }
+
+            const logHtml = `
+                <div class="console-log ${type}">
+                    <span class="log-time">${time}</span>
+                    <span class="log-type ${typeClass}">[${typeLabel}]</span>
+                    <span class="log-content">${content}</span>
+                </div>
+            `;
+            consoleBody.insertAdjacentHTML('beforeend', logHtml);
+            consoleBody.scrollTop = consoleBody.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleBody').innerHTML = '';
+            log('event', '', '控制台已清空');
+        }
+
+        // ==================== Toast ====================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ==================== 模拟API延迟 ====================
+        function simulateAPI(method, path, data, responseData, delay = 300) {
+            return new Promise((resolve) => {
+                log('request', method, path, data);
+                setTimeout(() => {
+                    log('response', '', path, responseData);
+                    resolve(responseData);
+                }, delay);
+            });
+        }
+
+        // ==================== 登录相关 ====================
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const response = await simulateAPI('POST', '/api/auth/login', 
+                { email, password: '******' },
+                { success: true, user: { id: 'user_001', email, name: email.split('@')[0] }, token: 'jwt_token_xxx' }
+            );
+
+            if (response.success) {
+                appState.isLoggedIn = true;
+                appState.isGuest = false;
+                appState.user = response.user;
+                showToast('登录成功！');
+                startLoginDemo();
+            }
+        }
+
+        async function handleRegister() {
+            const email = document.getElementById('loginEmail').value;
+            await simulateAPI('POST', '/api/auth/register', 
+                { email },
+                { success: true, message: '注册成功，请查收验证邮件' }
+            );
+            showToast('注册请求已发送！');
+        }
+
+        async function handleGuestLogin() {
+            const response = await simulateAPI('POST', '/api/auth/guest', 
+                {},
+                { success: true, user: { id: 'guest_xxx', name: '游客用户', isGuest: true } }
+            );
+
+            if (response.success) {
+                appState.isLoggedIn = true;
+                appState.isGuest = true;
+                appState.user = response.user;
+                showToast('以游客身份登录');
+                startLoginDemo();
+            }
+        }
+
+        async function handleLogout() {
+            await simulateAPI('POST', '/api/auth/logout', {}, { success: true });
+            appState.isLoggedIn = false;
+            appState.user = null;
+            switchPage('login');
+            showToast('已退出登录');
+        }
+
+        // ==================== 登录演示动画 ====================
+        let demoStep = 0;
+        const demoSteps = [
+            { emoji: '👔', text: '这是你的老板...', duration: 2000 },
+            { emoji: '😤', text: '他又让你加班了', duration: 2000 },
+            { emoji: '💩', text: '是时候报复了！', duration: 2000 },
+            { emoji: '🎯', text: '把便便扔到地图上', duration: 2000, quote: true }
+        ];
+
+        function startLoginDemo() {
+            const overlay = document.getElementById('demoOverlay');
+            overlay.classList.add('show');
+            demoStep = 0;
+            playDemoStep();
+        }
+
+        async function playDemoStep() {
+            if (demoStep >= demoSteps.length) {
+                skipDemo();
+                return;
+            }
+
+            const step = demoSteps[demoStep];
+            document.getElementById('demoEmoji').textContent = step.emoji;
+            document.getElementById('demoText').textContent = step.text;
+            
+            if (step.quote) {
+                // 调用激励文字API
+                const response = await simulateAPI('GET', '/api/quotes/random', null, 
+                    { success: true, data: { text: motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)] } }
+                );
+                document.getElementById('demoQuote').textContent = response.data.text;
+            } else {
+                document.getElementById('demoQuote').textContent = '';
+            }
+
+            // 进度条动画
+            const progressBar = document.getElementById('demoProgress');
+            progressBar.style.width = '0%';
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 100 / (step.duration / 50);
+                progressBar.style.width = Math.min(progress, 100) + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    demoStep++;
+                    setTimeout(playDemoStep, 200);
+                }
+            }, 50);
+        }
+
+        function skipDemo() {
+            document.getElementById('demoOverlay').classList.remove('show');
+            switchPage('swipe');
+            loadSwipeContent();
+        }
+
+        // ==================== 滑一滑服务 ====================
+        async function loadSwipeContent() {
+            // 加载Top3
+            const top3Response = await simulateAPI('GET', '/api/swipe/top3', { user_id: appState.user?.id }, 
+                { success: true, data: top3Data }
+            );
+            renderTop3(top3Response.data);
+
+            // 加载内容流
+            const feedResponse = await simulateAPI('GET', '/api/swipe/feed', { page: 1, page_size: 10 }, 
+                { success: true, data: contentData }
+            );
+            renderContentFeed(feedResponse.data);
+
+            // 随机弹出绘画引导
+            setTimeout(() => {
+                if (Math.random() > 0.5) {
+                    document.getElementById('drawPromptModal').classList.add('show');
+                    log('event', '', '显示绘画引导弹窗');
+                }
+            }, 3000);
+        }
+
+        function renderTop3(data) {
+            const container = document.getElementById('bannerScroll');
+            container.innerHTML = data.map(item => `
+                <div class="banner-card" onclick="viewContent('${item.id}')">
+                    <div class="banner-rank">${item.rank}</div>
+                    <div class="banner-info">
+                        <h4>${item.title}</h4>
+                        <div class="banner-stats">
+                            <span>❤️ ${item.likes}</span>
+                            <span>👎 ${item.dislikes}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderContentFeed(data) {
+            const container = document.getElementById('contentFeed');
+            container.innerHTML = data.map(item => `
+                <div class="content-card">
+                    <div class="card-image">${item.emoji}</div>
+                    <div class="card-body">
+                        <div class="card-author">
+                            <div class="author-avatar">👤</div>
+                            <span class="author-name">${item.author}</span>
+                        </div>
+                        <div class="card-title">${item.title}</div>
+                        <div class="card-desc">${item.desc}</div>
+                        <div class="card-actions">
+                            <button class="action-btn ${appState.likedContents.has(item.id) ? 'liked' : ''}" 
+                                    onclick="toggleLike('${item.id}', this)">
+                                ❤️ <span>${item.likes + (appState.likedContents.has(item.id) ? 1 : 0)}</span>
+                            </button>
+                            <button class="action-btn ${appState.favoritedContents.has(item.id) ? 'favorited' : ''}" 
+                                    onclick="toggleFavorite('${item.id}', this)">
+                                ⭐ <span>${item.favorites + (appState.favoritedContents.has(item.id) ? 1 : 0)}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function toggleLike(contentId, btn) {
+            const isLiked = appState.likedContents.has(contentId);
+            const method = isLiked ? 'DELETE' : 'POST';
+            
+            await simulateAPI(method, '/api/swipe/like', 
+                { user_id: appState.user?.id, content_id: contentId },
+                { success: true, new_like_count: 329 }
+            );
+
+            if (isLiked) {
+                appState.likedContents.delete(contentId);
+                btn.classList.remove('liked');
+            } else {
+                appState.likedContents.add(contentId);
+                btn.classList.add('liked');
+            }
+            showToast(isLiked ? '已取消点赞' : '点赞成功！');
+        }
+
+        async function toggleFavorite(contentId, btn) {
+            const isFavorited = appState.favoritedContents.has(contentId);
+            const method = isFavorited ? 'DELETE' : 'POST';
+            
+            await simulateAPI(method, '/api/swipe/favorite', 
+                { user_id: appState.user?.id, content_id: contentId },
+                { success: true }
+            );
+
+            if (isFavorited) {
+                appState.favoritedContents.delete(contentId);
+                btn.classList.remove('favorited');
+            } else {
+                appState.favoritedContents.add(contentId);
+                btn.classList.add('favorited');
+            }
+            showToast(isFavorited ? '已取消收藏' : '收藏成功！');
+        }
+
+        // ==================== 地图服务 ====================
+        async function loadMapData() {
+            const response = await simulateAPI('GET', '/api/map/global', null, {
+                success: true,
+                data: {
+                    total_shit_points: appState.poopCount,
+                    total_towers: appState.towerCount,
+                    total_occupied_buildings: appState.buildingCount
+                }
+            });
+
+            document.getElementById('poopCount').textContent = appState.poopCount;
+            document.getElementById('towerCount').textContent = appState.towerCount;
+            document.getElementById('buildingCount').textContent = appState.buildingCount;
+        }
+
+        async function throwPoop() {
+            const container = document.getElementById('mapContainer');
+            const x = 50 + Math.random() * 250;
+            const y = 80 + Math.random() * 400;
+
+            const response = await simulateAPI('POST', '/api/map/shit-points', 
+                { user_id: appState.user?.id, latitude: (30 + Math.random()).toFixed(4), longitude: (120 + Math.random()).toFixed(4) },
+                { success: true, shit_id: 'poop_' + Date.now(), tower_formed: appState.poopCount > 0 && appState.poopCount % 5 === 4 }
+            );
+
+            // 添加便便到地图
+            const poop = document.createElement('div');
+            poop.className = 'map-poop';
+            poop.textContent = '💩';
+            poop.style.left = x + 'px';
+            poop.style.top = y + 'px';
+            container.appendChild(poop);
+
+            appState.poopCount++;
+            document.getElementById('poopCount').textContent = appState.poopCount;
+
+            // 检查是否形成屎塔
+            if (response.tower_formed) {
+                appState.towerCount++;
+                document.getElementById('towerCount').textContent = appState.towerCount;
+                showToast('🎉 恭喜！形成了一座新的屎塔！');
+                log('event', '', '屎塔生成！当前屎塔数: ' + appState.towerCount);
+                
+                // 显示屎塔
+                const tower = document.createElement('div');
+                tower.className = 'map-tower';
+                tower.innerHTML = `
+                    <div class="tower-stack">💩💩💩</div>
+                    <div class="tower-label">屎塔</div>
+                `;
+                tower.style.left = x + 'px';
+                tower.style.top = y + 'px';
+                container.appendChild(tower);
+            }
+
+            showToast('💩 便便已投放！');
+        }
+
+        // ==================== 绘画服务 ====================
+        let canvas, ctx;
+        let isDrawing = false;
+        let currentColor = '#000';
+        let brushWidth = 5;
+        let history = [];
+        let historyIndex = -1;
+
+        function initCanvas() {
+            canvas = document.getElementById('drawCanvas');
+            ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveHistory();
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', endDraw);
+            canvas.addEventListener('mouseleave', endDraw);
+
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', endDraw);
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+
+            if (e.type === 'touchstart') {
+                startDraw({ offsetX: x, offsetY: y });
+            } else if (e.type === 'touchmove') {
+                draw({ offsetX: x, offsetY: y });
+            }
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = brushWidth;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+
+        function endDraw() {
+            if (isDrawing) {
+                isDrawing = false;
+                saveHistory();
+            }
+        }
+
+        function saveHistory() {
+            historyIndex++;
+            history = history.slice(0, historyIndex);
+            history.push(canvas.toDataURL());
+        }
+
+        function setColor(color, elem) {
+            currentColor = color;
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            elem.classList.add('active');
+            log('event', '', '切换画笔颜色: ' + color);
+        }
+
+        function setTool(tool, elem) {
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            elem.classList.add('active');
+            log('event', '', '选择工具: ' + tool);
+        }
+
+        function toggleStickers() {
+            const panel = document.getElementById('stickerPanel');
+            panel.classList.toggle('show');
+            log('event', '', panel.classList.contains('show') ? '打开贴纸面板' : '关闭贴纸面板');
+        }
+
+        function addSticker(emoji) {
+            ctx.font = '48px serif';
+            ctx.fillText(emoji, 100 + Math.random() * 100, 100 + Math.random() * 100);
+            saveHistory();
+            log('event', '', '添加贴纸: ' + emoji);
+            document.getElementById('stickerPanel').classList.remove('show');
+        }
+
+        function undoDrawing() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                const img = new Image();
+                img.src = history[historyIndex];
+                img.onload = () => ctx.drawImage(img, 0, 0);
+                log('event', '', '撤销操作');
+            }
+        }
+
+        function redoDrawing() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                const img = new Image();
+                img.src = history[historyIndex];
+                img.onload = () => ctx.drawImage(img, 0, 0);
+                log('event', '', '重做操作');
+            }
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveHistory();
+            log('event', '', '清空画布');
+        }
+
+        async function saveDrawing() {
+            const imageData = canvas.toDataURL('image/png');
+            
+            await simulateAPI('POST', '/api/draw/work/save', 
+                { user_id: appState.user?.id, image_data: '(base64...)', tags: ['老板', '搞笑'] },
+                { success: true, work_id: 'work_' + Date.now(), status: 'draft' }
+            );
+
+            showToast('作品已保存！');
+            
+            // 询问是否提交审核
+            if (confirm('是否提交作品审核？')) {
+                await simulateAPI('POST', '/api/draw/work/submit', 
+                    { work_id: 'work_xxx' },
+                    { success: true, review_status: 'pending' }
+                );
+                showToast('已提交审核，请等待结果');
+            }
+        }
+
+        // ==================== 个人中心 ====================
+        async function handleCheckin() {
+            const response = await simulateAPI('POST', '/api/points/checkin', 
+                { user_id: appState.user?.id },
+                { success: true, points_earned: 10, total_points: appState.points + 10, streak_days: appState.checkinDays + 1 }
+            );
+
+            appState.points = response.total_points;
+            appState.checkinDays = response.streak_days;
+            document.getElementById('userPoints').textContent = appState.points;
+            document.getElementById('userCheckin').textContent = appState.checkinDays;
+            showToast(`打卡成功！+${response.points_earned}积分`);
+        }
+
+        async function showMyWorks() {
+            await simulateAPI('GET', '/api/draw/works', { user_id: appState.user?.id }, 
+                { success: true, data: [{ id: 'w1', title: '我的老板' }] }
+            );
+            showToast('加载我的作品...');
+        }
+
+        async function showFavorites() {
+            await simulateAPI('GET', '/api/user/favorites', { user_id: appState.user?.id }, 
+                { success: true, data: [] }
+            );
+            showToast('加载收藏列表...');
+        }
+
+        async function showNotifications() {
+            await simulateAPI('GET', '/api/notify/list', { user_id: appState.user?.id }, 
+                { success: true, data: [{ id: 'n1', title: '欢迎加入BOSS KILL！', read: false }] }
+            );
+            showToast('加载通知列表...');
+        }
+
+        // ==================== 页面切换 ====================
+        function switchPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            const pageMap = {
+                'login': 'loginPage',
+                'swipe': 'swipePage',
+                'map': 'mapPage',
+                'draw': 'drawPage',
+                'profile': 'profilePage'
+            };
+
+            const pageId = pageMap[pageName];
+            if (pageId) {
+                document.getElementById(pageId).classList.add('active');
+                log('event', '', '切换到页面: ' + pageName);
+
+                // 页面初始化
+                if (pageName === 'draw' && !canvas) {
+                    setTimeout(initCanvas, 100);
+                }
+                if (pageName === 'map') {
+                    loadMapData();
+                }
+                if (pageName === 'profile') {
+                    updateProfilePage();
+                }
+            }
+
+            // 更新底部导航
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        function updateProfilePage() {
+            if (appState.user) {
+                document.getElementById('profileName').textContent = appState.user.name || '游客用户';
+                document.getElementById('profileEmail').textContent = appState.user.email || '未绑定邮箱';
+            }
+            document.getElementById('userPoints').textContent = appState.points;
+            document.getElementById('userWorks').textContent = appState.works;
+            document.getElementById('userCheckin').textContent = appState.checkinDays;
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function goToDraw() {
+            closeModal('drawPromptModal');
+            switchPage('draw');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            log('event', '', 'BOSS KILL 交互测试系统启动');
+            log('event', '', '请登录或以游客身份进入');
+        });
+    </script>
+</body>
+</html>
